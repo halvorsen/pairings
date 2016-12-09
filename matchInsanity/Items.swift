@@ -1,0 +1,29 @@
+//
+//  Brain.swift
+//  matchInsanity
+//
+//  Created by Aaron Halvorsen on 11/18/16.
+//  Copyright © 2016 Aaron Halvorsen. All rights reserved.
+//
+
+import Foundation
+
+struct Items {
+    let listOfImages = ["0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png",
+                        "10.png","11.png","12.png","13.png","14.png","15.png","16.png","17.png","18.png","19.png",
+                        "20.png","21.png","22.png","23.png","24.png","25.png","26.png","27.png","28.png","29.png",
+                        "30.png","31.png","32.png","33.png","34.png","35.png","36.png","37.png","38.png","39.png",
+                        "40.png","41.png","42.png","43.png","44.png","45.png","46.png","47.png","48.png","49.png",
+                        "50.png","51.png","52.png","53.png","54.png","55.png","56.png","57.png","58.png","59.png",
+                        "60.png","61.png","62.png","63.png","64.png","65.png","66.png","67.png","68.png","69.png",
+                        "70.png","71.png","72.png","73.png","74.png","75.png","76.png","77.png","78.png","79.png",
+                        "80.png","81.png","82.png","83.png","84.png","85.png","86.png","87.png","88.png","89.png",
+                        "90.png","91.png","92.png","93.png","94.png","95.png","96.png","97.png","98.png","99.png",
+                        "100.png","101.png","102.png","103.png","104.png","105.png","106.png","107.png","108.png","109.png",
+                        "110.png","111.png","112.png","113.png","114.png","115.png","116.png","117.png","118.png","119.png",
+                        "120.png","121.png","122.png","123.png","124.png","125.png","126.png","127.png","128.png","129.png",
+                        "130.png","131.png","132.png","133.png","134.png","135.png","136.png","137.png","138.png","139.png",
+                        "140.png","141.png","142.png","143.png","144.png","145.png","146.png","147.png","148.png","149.png",]
+    
+    let listOfWords = ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Kvothe","Bernadette","Farrah","Rory","Tom","Tolkien","Boyle","Pasteur","Bennet", "Brave", "Free", "Atoll", "Fast", "Prairie", "Carefree", "Shrewd", "Cool", "Elsa", "Dylan", "Bon", "Mountain", "Dakota", "Edinburgh", "Nile", "Asia", "Ural", "Austria", "Draco", "Blue", "Angel", "Pointer", "Twins", "Mallard", "Volleyball", "Gymnastics", "Snap", "Love", "Woodford", "Blonde", "Bee", "Max", "Cosmo", "Richter", "Niffler", "Primrose", "Penne", "Cherry", "Eden", "Springfield", "Alder', “Numbers", "Table", "Mario", "Sony", "Silly", "Curious", "Horn", "Saxophone", "Pen", "Batman", "Bert", "R2d2", "Minnie", "Kirk", "Piglet", "Thunder", "Romeo", "Chips", "Gram", "Knots", "Cup", "Force", "Hydrogen", "Neon", "Seven", "Sixteen", "Panzer", "Normandy", "Lincoln", "Spielberg", "Avatar", "Interstellar", "Spike", "Joaquin", "Picard", "Phelps", "Freestyle", "Clippers", "Hrbek", "Spears", "Prince", "Gaye", "Smokey", "iPod", "Mozilla", "ThinkPad", "Android", "Fanning", "GameBoy", "Ambition", "Tadpole", "Luminosity", "Balcony", "Sea", "Rock", "Answer", "Mom", "Give", "King", "Each", "Divide", "Paste", "Mars", "Stars", "Pepper", "Radio", "Root", "Deep", "Heavenly", "Burn", "Solemn", "Silent", "Hope", "Arial", "Circle", "Rectangle", "Prayer", "Reese’s", "Bullet", "Christmas", "Carrots", "Boys", "Fry", "Train", "Elevator", "Lightbulb", "Furnace", "","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","Rothfuss", "Howard", "Fowler", "Amy", "Bombadil", "Lewis", "Mendeleev", "Mayo", "Darcy", "Valiant", "Grace", "Island", "Swift", "Meadow", "Jaunty", "Wise", "Frosty", "Anna", "Desire", "Iver", "Lightening", "Fargo", "Scotland", "Africa", "Yangtze", "Russia", "Vienna", "Lizard", "Whale", "Shark", "Pug", "Wild", "Teal", "Pancake", "Tsukahara", "Manning", "Tennis", "Reserve", "Ale", "Honey", "Brooks", "Kramer", "Conan", "Bowtruckle", "Katniss", "Linguine", "Roma", "Eve", "Homer", "Hemlock", "Torah", "Chair", "Nintendo", "Walkman", "Putty", "George", "Tuba", "Clarinet", "Pencil", "Robin", "Ernie", "C-3po", "Mickey", "Spock", "Pooh", "Lightning", "Juliet", "Salsa", "Mass", "Speed", "Volume", "Newton", "Dioxide", "Helium", "Thirteen", "Nine", "U-Boat", "Midway", "Gettysburg", "Jaws", "Cameron", "Murph", "Lee", "Phoenix", "Jean-Luc", "Butterfly", "Ledecky", "Knicks", "Puckett", "Nsync", "Madonna", "Wonder", "Robinson", "MP3", "Firefox", "IBM", "Google", "Napster", "Tetris", "Passion", "Frog", "Glow", "Patio", "Expanse", "Roll", "Question", "Pop", "Take", "Queen", "Every", "Conquer", "Cut", "Venus", "Stripes", "Salt", "Flyer", "Cause", "Dark", "Muse", "Bright", "Vow", "Night", "Floats", "Helvetica", "Oval", "Square", "Appeal", "Pieces", "Silver", "Tree", "Peas", "Girls", "Broil", "Bus", "Escalator", "Sun", "Blanket","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+}
