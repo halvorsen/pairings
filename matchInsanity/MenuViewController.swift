@@ -7,6 +7,7 @@
 // soundness, absurdity, insane
 
 import UIKit
+import CoreData
 
 class MenuViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
@@ -14,15 +15,44 @@ class MenuViewController: UIViewController {
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
     let IAP = UIButton()
     let IAP2 = UIButton()
-    var y = Int()
-    var z = Int()
+
     var access = 1
     var centerPoint = CGPoint()
+    var y = Int()
+    var z = Int()
+    var game = String()
+    var gameData = String()
+    var accessToScore = false
+    var accessToWord = false
+    var accesstoTriple = false
+    var resultsGameRequest = [AnyObject]()
+    var list = [String]()
+    var done = [Int]()
+    var index = [Int]()
+    var isToSegue = false
+    var isToMatch = false
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let gameView: MatchViewController = segue.destination as! MatchViewController
-//        gameView.y = y
-//        gameView.z = z
+        if isToSegue {
+        let gameView: SegueViewController = segue.destination as! SegueViewController
+        gameView.y = y
+        gameView.z = z
+        gameView.game = game
+        gameView.gameData = gameData
+        gameView.list = list
+        gameView.index = index
+        gameView.done = done
+        } else if isToMatch {
+            let gameView: MatchViewController = segue.destination as! MatchViewController
+            gameView.y = y
+            gameView.z = z
+            gameView.game = game
+            gameView.gameData = gameData
+            gameView.list = list
+            gameView.index = index
+            gameView.done = done
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -41,6 +71,7 @@ class MenuViewController: UIViewController {
             image = UIImage(named: "MenuWheelNoTriples.png")!
         default:
             break
+            print("done: \(done)")
         }
         
         let imageView = UIImageView(image: image)
@@ -50,10 +81,10 @@ class MenuViewController: UIViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.respondToTapGesture(_:)))
         self.view.addGestureRecognizer(tap)
-        
-        //        if purchased {
-        //            removeIAP()
-        //        }
+        game = "farcical"
+        gameData = "Farcical"
+        loadData()
+ 
     }
     var paths = [UIBezierPath]()
     private func addButtons() {
@@ -150,81 +181,23 @@ class MenuViewController: UIViewController {
         scores.clipsToBounds = true
         self.view.addSubview(scores)
        
-//        let soundness = UIButton()
-//        soundness.backgroundColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-//        soundness.frame.size = CGSize( width: (375/750)*screenWidth, height: (81/750)*screenWidth)
-//        soundness.frame.origin.x = screenWidth/4
-//        soundness.frame.origin.y = (800/1332)*screenHeight
-//        soundness.tag = 1
-//        soundness.setTitle("SOUNDNESS", for: UIControlState.normal)
-//        soundness.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*40)
-//        soundness.setTitleColor(UIColor(red: 35/255, green: 35/255, blue: 35/255, alpha: 1.0), for: .normal)
-//        soundness.addTarget(self, action: #selector(MenuViewController.segueMatch(_:)), for: .touchUpInside)
-//        soundness.layer.cornerRadius = 5.0
-//        soundness.clipsToBounds = true
-//        self.view.addSubview(soundness)
-//        
-//        let absurdity = UIButton()
-//        absurdity.backgroundColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-//        absurdity.frame.size = CGSize( width: (375/750)*screenWidth, height: (81/750)*screenWidth)
-//        absurdity.frame.origin.x = screenWidth/4
-//        absurdity.frame.origin.y = (900/1332)*screenHeight
-//        absurdity.tag = 2
-//        absurdity.setTitle("ABSURDITY", for: UIControlState.normal)
-//        absurdity.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
-//        absurdity.setTitleColor(UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), for: .normal)
-//        absurdity.addTarget(self, action: #selector(MenuViewController.segueMatch(_:)), for: .touchUpInside)
-//        absurdity.layer.cornerRadius = 5.0
-//        absurdity.clipsToBounds = true
-//        self.view.addSubview(absurdity)
-//        
-//        let insane = UIButton()
-//        insane.backgroundColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
-//        insane.frame.size = CGSize( width: (375/750)*screenWidth, height: (81/750)*screenWidth)
-//        insane.frame.origin.x = screenWidth/4
-//        insane.frame.origin.y = (1000/1332)*screenHeight
-//        insane.tag = 3
-//        insane.setTitle("INSANE", for: UIControlState.normal)
-//        insane.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
-//        insane.setTitleColor(UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), for: .normal)
-//        insane.addTarget(self, action: #selector(MenuViewController.segueMatch(_:)), for: .touchUpInside)
-//        insane.layer.cornerRadius = 5.0
-//        insane.clipsToBounds = true
-//        self.view.addSubview(insane)
-//        
-//        
-//        IAP.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.0)
-//        IAP.frame.size = CGSize( width: (375/750)*screenWidth, height: (81/750)*screenWidth)
-//        IAP.frame.origin.x = screenWidth/4
-//        IAP.frame.origin.y = (1100/1332)*screenHeight
-//        IAP.setTitle("Unlock Scorekeeping", for: UIControlState.normal)
-//        IAP.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
-//        IAP.setTitleColor(UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), for: .normal)
-//        IAP.addTarget(self, action: #selector(MenuViewController.IAP(_:)), for: .touchUpInside)
-//        IAP.layer.cornerRadius = 5.0
-//        IAP.clipsToBounds = true
-//        self.view.addSubview(IAP)
-//        
-//        IAP2.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.0)
-//        IAP2.frame.size = CGSize( width: (375/750)*screenWidth, height: (81/750)*screenWidth)
-//        IAP2.frame.origin.x = screenWidth/4
-//        IAP2.frame.origin.y = (1200/1332)*screenHeight
-//        IAP2.setTitle("Restore Purchase", for: UIControlState.normal)
-//        IAP2.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
-//        IAP2.setTitleColor(UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0), for: .normal)
-//        IAP2.addTarget(self, action: #selector(MenuViewController.IAP2(_:)), for: .touchUpInside)
-//        IAP2.layer.cornerRadius = 5.0
-//        IAP2.clipsToBounds = true
-//        self.view.addSubview(IAP2)
+
         
     }
     
     @objc private func respondToTapGesture(_ gesture: UIGestureRecognizer) {
         print("taprecognized")
-        
+        let levels = ["sanity", "absurd", "insane", "idiotic", "rediculous", "sensible", "foolish", "farcical", "wise"]
+        let levelsData = ["Sanity", "Absurd", "Insane", "Sensible", "Rediculous", "Idiotic", "Foolish", "Farcical", "Wise"]
+        let ys = [4,14,14,14,14,4,14,14,4]
+        let zs = [7,15,29,43,23,8,29,15,10]
             for n in 0...8 {
                 centerPoint = gesture.location(in: view)
                 if paths[n].contains(centerPoint) {
+                    game = levels[n]
+                    gameData = levelsData[n]
+                    y = ys[n]
+                    z = zs[n]
                     segueMatch()
                 }
             }
@@ -251,20 +224,43 @@ class MenuViewController: UIViewController {
     }
     
     @objc private func segueMatch() {
+        if loadData() {
+            isToSegue = true
+            self.performSegue(withIdentifier: "toSegueFromMenu", sender: self)
+        } else {
+            isToMatch = true
+            self.performSegue(withIdentifier: "toMatchFromMenu", sender: self)
+        }
         
-//        switch sender.tag {
-//        case 1:
-//            y = 4
-//            z = 3
-//        case 2:
-//            y = 14
-//            z = 15
-//        case 3:
-//            y = 14
-//            z = 29
-//        default:
-//            break
-//        }
-        self.performSegue(withIdentifier: "toSegueFromMenu", sender: self)
     }
+    
+    
+    //core data functions
+    
+    private func loadData() -> Bool {
+        var isGameInProgress = false
+        let appDel = (UIApplication.shared.delegate as! AppDelegate)
+        let context = appDel.persistentContainer.viewContext
+        
+        let gameRequest = NSFetchRequest<NSFetchRequestResult>(entityName: gameData)
+        
+        do { resultsGameRequest = try context.fetch(gameRequest) } catch  {
+            print("Could not cache the response \(error)")
+        }
+        
+        if resultsGameRequest.count > 0 {
+            isGameInProgress = true
+            list = resultsGameRequest.last?.value(forKeyPath: "list") as! [String]
+            done = resultsGameRequest.last?.value(forKeyPath: "bool") as! [Int]
+            index = resultsGameRequest.last?.value(forKeyPath: "index") as! [Int]
+        }
+        print("list: \(list)")
+        print("done: \(done)")
+        print("index: \(index)")
+        
+        return isGameInProgress
+        
+    }
+
+    //coredata functions end
 }

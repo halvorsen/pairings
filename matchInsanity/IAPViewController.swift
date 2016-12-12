@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class IAPViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
+    var purchase = String()
 
     
     override var prefersStatusBarHidden: Bool {
@@ -196,7 +198,7 @@ class IAPViewController: UIViewController {
         quad.setTitle("Quad!", for: UIControlState.normal)
         quad.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
         quad.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
-        quad.addTarget(self, action: #selector(IAPViewController.quad(_:)), for: .touchUpInside)
+        quad.addTarget(self, action: #selector(IAPViewController.word(_:)), for: .touchUpInside)
     
      
         self.view.addSubview(quad)
@@ -218,23 +220,41 @@ class IAPViewController: UIViewController {
     }
 
     @objc private func restore(_ sender: UIButton) {
-        
+        //add restore code
     }
     
-    @objc private func quad(_ sender: UIButton) {
-        
+    @objc private func word(_ sender: UIButton) {
+        purchase = "Word"
     }
     
     @objc private func triples(_ sender: UIButton) {
-        
+        purchase = "Triple"
     }
     
     @objc private func scoring(_ sender: UIButton) {
-        
+        purchase = "Score"
     }
     
     @objc private func menu(_ sender: UIButton) {
         self.performSegue(withIdentifier: "toMenuFromIAP", sender: self)
     }
+    
+    //core data functions
+    private func savePurchase() {
+        
+        let appDel = UIApplication.shared.delegate as! AppDelegate
+        let context = appDel.persistentContainer.viewContext
+        let entity = NSEntityDescription.insertNewObject(forEntityName: purchase, into: context)
+        entity.setValue(true, forKey: "didPay")
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
+    
 
 }

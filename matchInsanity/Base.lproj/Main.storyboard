@@ -23,7 +23,7 @@
                         <segue destination="gPf-yh-M5e" kind="show" identifier="toScoreFromMenu" id="c5M-pp-rwU"/>
                         <segue destination="pLD-sT-Si4" kind="show" identifier="toIAPFromMenu" id="xMd-zD-krC"/>
                         <segue destination="mXL-D0-24A" kind="show" identifier="toSegueFromMenu" id="gBw-yY-17k"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="toMatchfromMenu" id="vDf-hQ-l0M"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="toMatchFromMenu" id="vDf-hQ-l0M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GIQ-i6-tZo" userLabel="First Responder" sceneMemberID="firstResponder"/>
