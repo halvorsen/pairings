@@ -8,13 +8,113 @@
 
 import UIKit
 import CoreData
+import StoreKit
+import SwiftyStoreKit
 
 class IAPViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
     var purchase = String()
-
+    
+    
+    
+    //IAP
+    
+    private func purchaseRetry(productId: String) {
+        
+        let refreshAlert = UIAlertController(title: "PURCHASE FAILED", message: "Retry?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            SwiftyStoreKit.purchaseProduct(productId) { result in
+                switch result {
+                case .success( _):
+                    
+                    if productId == "pairings.iap.scoreboard" {
+                        
+                        self.savePurchase()
+                        
+                    }
+                    if productId == "pairings.iap.advancedLevel1" {
+                        self.savePurchase()
+                        
+                    }
+                    if productId == "pairings.iap.advancedLevel2" {
+                        self.savePurchase()
+                        
+                    }
+                    
+                case .error(let error):
+                    print("error: \(error)")
+                    print("Purchase Failed: \(error)")
+                    self.purchaseRetry(productId: productId)
+                }            }
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(refreshAlert, animated: true, completion: nil)
+    }
+    
+    
+    private func purchase(productId: String) {
+        var title = String()
+        var message = String()
+        if productId == "pairings.iap.scoreboard" {
+            
+            title = "ADD SCOREBOARD"
+            message = "Track Highscores?"
+        }
+        if productId == "pairings.iap.advancedLevel1" {
+            
+            title = "BUY FOOLISH LEVEL"
+            message = "Unlock Level?"
+        }
+        if productId == "pairings.iap.advancedLevel2" {
+            
+            
+            title = "BUY 3 MORE LEVELS"
+            message = "Unlock triples levels?"
+        }
+        
+        
+        let refreshAlert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            SwiftyStoreKit.purchaseProduct(productId) { result in
+                switch result {
+                case .success( _):
+                    
+                    if productId == "pairings.iap.scoreboard" {
+                        self.savePurchase()
+                        
+                    }
+                    if productId == "pairings.iap.advancedLevel1" {
+                        self.savePurchase()
+                        
+                    }
+                    if productId == "pairings.iap.advancedLevel2" {
+                        self.savePurchase()
+                        
+                    }
+                    
+                case .error(let error):
+                    print("error: \(error)")
+                    print("Purchase Failed: \(error)")
+                    self.purchaseRetry(productId: productId)
+                }
+            }
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(refreshAlert, animated: true, completion: nil)
+        
+    }
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -22,20 +122,20 @@ class IAPViewController: UIViewController {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        let gameView: MatchViewController = segue.destination as! MatchViewController
-//        gameView.y = y
-//        gameView.z = z
+        //        let gameView: MatchViewController = segue.destination as! MatchViewController
+        //        gameView.y = y
+        //        gameView.z = z
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 1.0)
+        view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         addButtons()
         addLines()
         
-
+        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -85,15 +185,6 @@ class IAPViewController: UIViewController {
         shapeLayer4.strokeColor = UIColor(red: 248/255, green: 223/255, blue: 74/255, alpha: 1.0).cgColor
         shapeLayer4.lineWidth = 1.0
         view.layer.addSublayer(shapeLayer4)
-
-        
-        
-        //images
-        var image = UIImage()
-        image = UIImage(named: "Troll.png")!
-        let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 306*screenWidth/750, y: 896*screenHeight/1332, width: 138*screenWidth/750, height: 150*screenWidth/750)
-        view.addSubview(imageView)
         
         
         
@@ -108,13 +199,14 @@ class IAPViewController: UIViewController {
         unlockLabel.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
         view.addSubview(unlockLabel)
         
+        
         let desc1 = UILabel()
         desc1.frame.size = CGSize( width: (467/750)*screenWidth, height: (50/1332)*screenHeight)
         desc1.frame.origin.x = (144/750)*screenWidth
         desc1.frame.origin.y = (440/1332)*screenHeight
         desc1.font = UIFont(name: "HelveticaNeue", size: fontSizeMultiplier*10)
         desc1.text = "Track your speed and accuracy by saving a high score for each level."
-
+        
         desc1.textAlignment = .center
         desc1.numberOfLines = 0
         desc1.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
@@ -125,7 +217,7 @@ class IAPViewController: UIViewController {
         desc2.frame.origin.x = (144/750)*screenWidth
         desc2.frame.origin.y = (572/1332)*screenHeight
         desc2.font = UIFont(name: "HelveticaNeue", size: fontSizeMultiplier*10)
-        desc2.text = "Complicate things further by finding three of each symbol."
+        desc2.text = "Complicate things further by finding three of each symbol. (Unlock 3 Levels)"
         desc2.textAlignment = .center
         desc2.numberOfLines = 0
         desc2.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
@@ -136,7 +228,7 @@ class IAPViewController: UIViewController {
         desc3.frame.origin.x = (144/750)*screenWidth
         desc3.frame.origin.y = (704/1332)*screenHeight
         desc3.font = UIFont(name: "HelveticaNeue", size: fontSizeMultiplier*10)
-        desc3.text = "Haven’t had enough punishment? Try finding four of each symbol."
+        desc3.text = "Haven’t had enough punishment? Try the largest word pairing puzzle. (Unlock 1 Level)"
         desc3.textAlignment = .center
         desc3.numberOfLines = 0
         desc3.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
@@ -155,7 +247,7 @@ class IAPViewController: UIViewController {
         
         //buttons
         
-        var arrow = UIButton()
+        let arrow = UIButton()
         arrow.frame = CGRect(x: 329*screenWidth/750, y: 41*screenHeight/1332, width: 93*screenWidth/750, height: 76*screenWidth/750)
         arrow.setImage(UIImage(named: "Arrow.png"), for: .normal)
         arrow.tag = 200
@@ -172,11 +264,11 @@ class IAPViewController: UIViewController {
         scoring.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
         scoring.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         scoring.addTarget(self, action: #selector(IAPViewController.scoring(_:)), for: .touchUpInside)
- 
+        
         self.view.addSubview(scoring)
         
         let triples = UIButton()
-   
+        
         triples.frame.size = CGSize( width: (450/750)*screenWidth, height: (24/750)*screenWidth)
         triples.frame.origin.x = 150*screenWidth/750
         triples.frame.origin.y = (539/1332)*screenHeight
@@ -185,26 +277,26 @@ class IAPViewController: UIViewController {
         triples.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
         triples.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         triples.addTarget(self, action: #selector(IAPViewController.triples(_:)), for: .touchUpInside)
- 
-
+        
+        
         self.view.addSubview(triples)
         
         let quad = UIButton()
-    
+        
         quad.frame.size = CGSize( width: (450/750)*screenWidth, height: (24/750)*screenWidth)
         quad.frame.origin.x = 150*screenWidth/750
         quad.frame.origin.y = (671/1332)*screenHeight
         quad.tag = 2
-        quad.setTitle("Quad!", for: UIControlState.normal)
+        quad.setTitle("Foolish!", for: UIControlState.normal)
         quad.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
         quad.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         quad.addTarget(self, action: #selector(IAPViewController.word(_:)), for: .touchUpInside)
-    
-     
+        
+        
         self.view.addSubview(quad)
         
         let restore = UIButton()
-
+        
         restore.frame.size = CGSize( width: (450/750)*screenWidth, height: (76/750)*screenWidth)
         restore.frame.origin.x = 150*screenWidth/750
         restore.frame.origin.y = (1080/1332)*screenHeight
@@ -213,26 +305,140 @@ class IAPViewController: UIViewController {
         restore.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*12)
         restore.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
         restore.addTarget(self, action: #selector(IAPViewController.restore(_:)), for: .touchUpInside)
-       
+        
         self.view.addSubview(restore)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            unlockLabel.frame.size = CGSize( width: screenWidth, height: (224/1332)*screenHeight)
+            restore.frame.origin.y = (1065/1332)*screenHeight
+            quad.frame.origin.y = (661/1332)*screenHeight
+            triples.frame.origin.y = (529/1332)*screenHeight
+            scoring.frame.origin.y = (397/1332)*screenHeight
+        }
         
-        
-    }
-
-    @objc private func restore(_ sender: UIButton) {
-        //add restore code
     }
     
+    @objc private func restore(_ sender: UIButton) {
+        
+        let refreshAlert = UIAlertController(title: "RESTORE", message: "Restore previously purchased items?", preferredStyle: UIAlertControllerStyle.alert)
+        
+        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            
+            SwiftyStoreKit.restorePurchases() { results in
+                if results.restoreFailedProducts.count > 0 {
+                    print("Restore Failed: \(results.restoreFailedProducts)")
+                    SwiftyStoreKit.restorePurchases() { results in
+                        if results.restoreFailedProducts.count > 0 {
+                            print("Restore Failed: \(results.restoreFailedProducts)")
+                        }
+                        else if results.restoredProductIds.count > 0 {
+                            print("Restore Success: \(results.restoredProductIds)")
+                            let refreshAlert = UIAlertController(title: "Success", message: "You're all set", preferredStyle: UIAlertControllerStyle.alert)
+                            
+                            refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                                }))
+                            self.present(refreshAlert, animated: true, completion: nil)
+                            for r in results.restoredProductIds {
+                                switch r {
+                                case "pairings.iap.scoreboard":
+                                    self.purchase = "score"
+                                case "pairings.iap.advancedLevel1":
+                                    self.purchase = "word"
+                                    
+                                case "pairings.iap.advancedLevel2":
+                                    self.purchase = "triple"
+                                default:
+                                    break
+                                    
+                                }
+                                
+                                self.savePurchase()
+                            }
+                            
+                        }
+                        else {
+                            print("Nothing to Restore")
+                            
+                            
+                            let alert = UIAlertController(title: "RESTORE ERROR", message: "Nothing to Restore", preferredStyle: UIAlertControllerStyle.alert)
+                            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        }
+                    }
+                }
+                else if results.restoredProductIds.count > 0 {
+                    print("Restore Success: \(results.restoredProductIds)")
+                    let refreshAlert = UIAlertController(title: "Success", message: "You're all set", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+                        }))
+                    self.present(refreshAlert, animated: true, completion: nil)
+                    for r in results.restoredProductIds {
+                        switch r {
+                        case "pairings.iap.scoreboard":
+                            self.purchase = "score"
+                        case "pairings.iap.advancedLevel1":
+                            self.purchase = "word"
+                            
+                        case "pairings.iap.advancedLevel2":
+                            self.purchase = "triple"
+                        default:
+                            break
+                            
+                        }
+                        
+                        self.savePurchase()
+                    }
+                    
+                    
+                } else {
+                    print("Nothing to Restore")
+                    
+                    let alert = UIAlertController(title: "RESTORE ERROR", message: "Nothing to Restore", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+            
+            
+        }))
+        
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            
+        }))
+        
+        present(refreshAlert, animated: true, completion: nil)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    
     @objc private func word(_ sender: UIButton) {
-        purchase = "Word"
+        purchase = "word"
+        purchase(productId: "pairings.iap.advancedLevel1")
     }
     
     @objc private func triples(_ sender: UIButton) {
-        purchase = "Triple"
+        purchase = "triple"
+        purchase(productId: "pairings.iap.advancedLevel2")
     }
     
     @objc private func scoring(_ sender: UIButton) {
-        purchase = "Score"
+        purchase = "score"
+        purchase(productId: "pairings.iap.scoreboard")
     }
     
     @objc private func menu(_ sender: UIButton) {
@@ -241,20 +447,26 @@ class IAPViewController: UIViewController {
     
     //core data functions
     private func savePurchase() {
-        
+        print("purchase attribute: \(purchase)")
         let appDel = UIApplication.shared.delegate as! AppDelegate
         let context = appDel.persistentContainer.viewContext
-        let entity = NSEntityDescription.insertNewObject(forEntityName: purchase, into: context)
-        entity.setValue(true, forKey: "didPay")
+        let entity = NSEntityDescription.insertNewObject(forEntityName: "Purchase", into: context)
+        entity.setValue(true, forKey: purchase)
         do {
             try context.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
             let nserror = error as NSError
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
     }
     
-
+    
 }

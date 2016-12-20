@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import AudioToolbox
 
 class MatchViewController: UIViewController {
     
@@ -19,20 +20,21 @@ class MatchViewController: UIViewController {
     var y = 4
     var z = 3
     var fontSizeMultiplier = UIScreen.main.bounds.width / 375
-    let frontMargin = 10*UIScreen.main.bounds.width/750 + 3
-    let topMargin = 179*UIScreen.main.bounds.height/1332 + 3
-    let tileWidth = UIScreen.main.bounds.width/5 - 10
-    var tileHeight = UIScreen.main.bounds.width/5 - 10
+    var frontMargin = 10*UIScreen.main.bounds.width/750
+    var topMargin = 179*UIScreen.main.bounds.height/1332 + 3
+    var tileWidth = (UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/5
+    var tileHeight = (UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/5
     var tiles = [UILabel]() //save tile
     var tilesColors = [Int]() //save color number for each tile
     var rectArray = [CGRect]()
     var pointArray = [CGPoint]()
-    let gap = ((UIScreen.main.bounds.width/5 - 10) - 62.5) / 2
+    var gap = (UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/50
+    var margin = 10*UIScreen.main.bounds.width/750
     var game = String()
     var gameData = String()
-    var flipped1: Int? {didSet{print("flipped1: \(flipped1)")}}
-    var flipped2: Int? {didSet{print("flipped2: \(flipped2)")}}
-    var flipped3: Int? {didSet{print("flipped3: \(flipped3)")}}
+    var flipped1: Int?
+    var flipped2: Int?
+    var flipped3: Int?
     var flippedTiles: Int = 0
     var tileAmount = Int()
     var centerPoint = CGPoint()
@@ -47,18 +49,34 @@ class MatchViewController: UIViewController {
     var index = [Int]()
     var resultsGameRequest = [AnyObject]()
     var isNewBoard = 1
+    var time: Int = 0
+    var guessNumber: Int = 0
+    var scoreLabel = UILabel()
+    var scoreText = String()
+    var imageWidth = 8*(UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/50
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
+    var score: Int = 0 {didSet {
+    
+        let remainder = score%10
+        scoreText = String(score - remainder)
+        
+        } }
+    
     override func viewDidLoad() {
-        print("isNewBoard3: \(isNewBoard)")
+
         super.viewDidLoad()
+        print("imagewidth: \(imageWidth)")
+        print("tilewidth: \(tileWidth)")
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
         
         self.view = self.scrollView
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 6.08*screenWidth)
-        view.backgroundColor = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 1.0)
+        
+        view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 1.0)
         
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(MatchViewController.respondToTapGesture(_:)))
@@ -67,15 +85,45 @@ class MatchViewController: UIViewController {
         
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
-        print("isNewBoard4: \(isNewBoard)")
+
         if game == "wise" || game == "farcical" || game == "foolish" {
-            tileHeight = tileWidth/2
-            print("tileHeight: \(tileHeight)")
+            tileHeight = 1.06*tileWidth/2
+            tileWidth = (screenWidth - 40*screenWidth/750)/3
+        
+        }
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if game == "wise" || game == "farcical" || game == "foolish" {
+               margin = 5
+                tileWidth = (screenWidth - 2*frontMargin - 9*margin)/10
+                tileHeight = tileWidth/3
+                topMargin = tileWidth
+                
+            } else {
+                margin = 5
+            tileHeight = (screenWidth - 2*frontMargin - 14*margin)/15
+            tileWidth = tileHeight
+            topMargin = tileHeight
+            
+            }
+            gap = tileWidth / 10
+            imageWidth = 0.8*tileWidth
+            if game == "wise" || game == "sanity" || game == "sensible" {
+                
+                tileWidth += tileWidth
+                tileHeight  += tileHeight
+            }
+            
+            
+
+            
         }
         
         tileAmount = (y+1)*(z+1)
-        print("isnewboard: \(isNewBoard)")
+    
         if isNewBoard == 1 {
             organizeIndex()
             
@@ -91,11 +139,15 @@ class MatchViewController: UIViewController {
             }
             indexArray = index
         }
-        print("done: \(done)")
+  
         addLabels()
         if done.count > 1 {
             if game == "wise" || game == "farcical" || game == "foolish" {
                 for n in done {
+                    if n == 500 {
+                        print("500")
+                    } else {
+                    print("n tiles: \(n)")
                     tiles[n].alpha = 0.0
                     
                     let wordView = UILabel()
@@ -103,12 +155,14 @@ class MatchViewController: UIViewController {
                     wordView.text = listOfWordsToUse[indexArray[n]]
                     
                     
-                    wordView.frame = CGRect(x: pointArray[n].x, y: pointArray[n].y, width: tileWidth, height: tileHeight)
-                    wordView.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*10)
+                    wordView.frame = CGRect(x: pointArray[n].x - margin, y: pointArray[n].y, width: tileWidth + margin, height: tileHeight)
+                    wordView.font = UIFont(name: "HelveticaNeue-Bold", size: 10)
                     wordView.alpha = 0.2
                     wordView.textAlignment = .center
                     wordView.textColor = UIColor.white
                     view.addSubview(wordView)
+                     guessNumber += 1
+                    }
                 }
                 
             } else if game == "sanity" || game == "absurd" || game == "insane" {
@@ -116,7 +170,7 @@ class MatchViewController: UIViewController {
                     if n == 500 {
                         print("500")
                     } else {
-                        print("n: \(n)")
+                  
                         var image = UIImage()
                         if indexArray[n] < tileAmount/2 {
                             image = UIImage(named: listOfImagesToUse[indexArray[n]])!
@@ -124,9 +178,10 @@ class MatchViewController: UIViewController {
                             image = UIImage(named: listOfImagesToUse[indexArray[n] - tileAmount/2])!
                         }
                         let imageView = UIImageView(image: image)
-                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: 125*screenWidth/750, height: 125*screenWidth/750)
+                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: imageWidth, height: imageWidth)
                         imageView.alpha = 0.2
                         view.addSubview(imageView)
+                         guessNumber += 1
                         tiles[n].alpha = 0.0
                     }
                 }
@@ -135,7 +190,7 @@ class MatchViewController: UIViewController {
                     if n == 500 {
                         print("500")
                     } else {
-                        print("n: \(n)")
+                    
                         var image = UIImage()
                         if indexArray[n] < tileAmount/3 {
                             image = UIImage(named: myItems.listOfImages[indexArray[n]])!
@@ -145,17 +200,29 @@ class MatchViewController: UIViewController {
                             image = UIImage(named: myItems.listOfImages[indexArray[n] - 2*tileAmount/3])!
                         }
                         let imageView = UIImageView(image: image)
-                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: 125*screenWidth/750, height: 125*screenWidth/750)
+                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: imageWidth, height: imageWidth)
                         imageView.alpha = 0.2
                         view.addSubview(imageView)
+                        guessNumber += 1
                         tiles[n].alpha = 0.0
                     }
                 }
             }
+  
         }
+     
         
     }
+
+
     
+    func appMovedToBackground() {
+        saveLevel()
+    }
+    
+    @objc private func timerAction() {
+        time += 1
+    }
     
     private func addLabels() {
         
@@ -166,12 +233,15 @@ class MatchViewController: UIViewController {
         arrow.addTarget(self, action: #selector(MatchViewController.menu(_:)), for: .touchUpInside)
         view.addSubview(arrow)
         
-        let scoreLabel = UILabel()
-        scoreLabel.frame.size = CGSize( width: (500/750)*screenWidth, height: (115/1332)*screenHeight)
+        
+        scoreLabel.frame.size = CGSize( width: screenWidth, height: (115/1332)*screenHeight)
         scoreLabel.frame.origin.x = frontMargin + 35
         scoreLabel.frame.origin.y = (31/1332)*screenHeight
-        scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
-        scoreLabel.text = "123450"
+        scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*50)
+        scoreLabel.text = "Scoreboard"
+        if score > 0 {
+            scoreLabel.text = scoreText
+        }
         scoreLabel.textAlignment = .left
         scoreLabel.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
         view.addSubview(scoreLabel)
@@ -181,10 +251,22 @@ class MatchViewController: UIViewController {
                 let tile = UILabel()
                 tiles.append(tile)
                 tile.frame.size = CGSize( width: tileWidth, height: tileHeight)
-                tile.frame.origin.x = frontMargin + CGFloat(i)*(tileWidth + 6)
-                tile.frame.origin.y = topMargin + CGFloat(j)*(tileHeight + 6)
+                
+                    tile.frame.origin.x = frontMargin + CGFloat(i)*(tileWidth + margin)
+                
+                if UIDevice.current.userInterfaceIdiom != .pad && game == "wise" {
+                    tile.frame.origin.x = frontMargin + CGFloat(i)*(tileWidth + margin)
+                }
+                tile.frame.origin.y = topMargin + CGFloat(j)*(tileHeight + margin)
                 let point = CGPoint(x: tile.frame.origin.x, y: tile.frame.origin.y)
                 pointArray.append(point)
+                var maxx = CGFloat()
+                var maxy = CGFloat()
+                if i == y && j == z {
+                    maxx = tile.frame.maxX + 10*screenWidth/750
+                    maxy = tile.frame.maxY + 10*screenWidth/750
+                    self.scrollView.contentSize = CGSize(width: maxx, height: maxy)
+                }
                 
                 let randomNumber = Int(arc4random_uniform(6))
                 tilesColors.append(randomNumber)
@@ -220,6 +302,42 @@ class MatchViewController: UIViewController {
                 
             }
         }
+        
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            
+            if game == "wise" || game == "sanity" || game == "sensible" {
+                
+                tileWidth -= tileWidth/2
+                tileHeight  -= tileHeight/2
+            }
+        scoreLabel.frame.size = CGSize( width: screenWidth/3, height: tileWidth)
+        scoreLabel.frame.origin.x = frontMargin + 1.25*tileWidth
+        scoreLabel.frame.origin.y = 0
+        scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 30)
+            
+            if game == "wise" || game == "farcical" || game == "foolish" {
+                scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 50)
+                scoreLabel.frame.size = CGSize( width: screenWidth/2, height: tileWidth)
+            }
+            
+            
+            arrow.frame = CGRect(x: frontMargin + tileWidth/2, y: 0.29*topMargin, width: tileWidth/2, height: 37*tileWidth/88)
+            
+            var maxx = CGFloat()
+            var maxy = CGFloat()
+            let tile = tiles.last
+                maxx = (tile?.frame.maxX)! + frontMargin
+                maxy = (tile?.frame.maxY)! + frontMargin
+                self.scrollView.contentSize = CGSize(width: maxx, height: maxy)
+            
+            if game == "wise" || game == "sanity" || game == "sensible" {
+                
+                tileWidth += tileWidth
+                tileHeight  += tileHeight
+            }
+            
+        }
     }
     
     
@@ -238,21 +356,17 @@ class MatchViewController: UIViewController {
                         }
                         tiles[n].alpha = 0.0
                         var image = UIImage()
-                        print("n: \(n)")
+                 
                         
                         if indexArray[n] < tileAmount/2 {
-                            print(indexArray[n])
-                            print(listOfImagesToUse[indexArray[n]])
-                            print(indexArray[n])
+       
                             image = UIImage(named: listOfImagesToUse[indexArray[n]])!
                         } else {
-                            print(indexArray[n] - tileAmount/2)
-                            print(listOfImagesToUse[indexArray[n] - tileAmount/2])
-                            print(indexArray[n] - tileAmount/2)
+            
                             image = UIImage(named: listOfImagesToUse[indexArray[n] - tileAmount/2])!
                         }
                         let imageView = UIImageView(image: image)
-                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: 125*screenWidth/750, height: 125*screenWidth/750)
+                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: imageWidth, height: imageWidth)
                         imageView.alpha = 1.0
                         
                         if imageViewArray.count == 0 {
@@ -271,6 +385,7 @@ class MatchViewController: UIViewController {
                             binary = true
                         }
                         view.addSubview(imageView)
+                        guessNumber += 1
                         
                         if flipped1 != nil && flipped2 != nil {
                             if tiles[flipped1!].alpha == 0.0 && tiles[(flipped2!)].alpha == 0.0 {
@@ -279,6 +394,13 @@ class MatchViewController: UIViewController {
                                 if (indexArray[flipped1!] == indexArray[flipped2!] - tileAmount/2) || (indexArray[flipped1!] == indexArray[flipped2!] + tileAmount/2) {
                                     done.append(flipped1!)
                                     done.append(flipped2!)
+                                    var _score = 50000 - 2*time - 20*(guessNumber - 2*tileAmount)
+                                    if _score < 500 {
+                                        _score = 500
+                                    }
+                                    score += _score
+                                    scoreLabel.text = scoreText
+                                   // scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
                                     flipped1 = nil
                                     flipped2 = nil
                                     
@@ -287,7 +409,11 @@ class MatchViewController: UIViewController {
                                     imageViewArray[0] = nil
                                     imageViewArray[1] = nil
                                     flippedTiles = 0
-                                    
+                                    AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                                    if done.count >= tileAmount {
+                                        saveScore()
+                                        endGame()
+                                    }
                                     
                                 }
                             } else {
@@ -309,8 +435,7 @@ class MatchViewController: UIViewController {
                     
                     if rectArray[n].contains(centerPoint) && flipped1 != nil && flipped2 != nil  {
                         if done.contains(n) {
-                            print("entered case 2 done statement")
-                            print(done)
+      
                             break outerLoop
                         }
                         tiles[flipped1!].alpha = 1.0
@@ -320,8 +445,7 @@ class MatchViewController: UIViewController {
                     }
                     if rectArray[n].contains(centerPoint) {
                         if done.contains(n) {
-                            print("entered case 2 done statement")
-                            print(done)
+                      
                             break outerLoop
                         }
                         tiles[n].alpha = 0.0
@@ -329,15 +453,14 @@ class MatchViewController: UIViewController {
                         if indexArray[n] < tileAmount/2 {
                             image = UIImage(named: listOfImagesToUse[indexArray[n]])!
                         } else {
-                            print(indexArray[n] - tileAmount/2)
-                            print(listOfImagesToUse[indexArray[n] - tileAmount/2])
-                            print(indexArray[n] - tileAmount/2)
+            
                             image = UIImage(named: listOfImagesToUse[indexArray[n] - tileAmount/2])!
                         }
                         let imageView = UIImageView(image: image)
-                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: 125*screenWidth/750, height: 125*screenWidth/750)
+                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: imageWidth, height: imageWidth)
                         imageView.alpha = 1.0
                         view.addSubview(imageView)
+                         guessNumber += 1
                         
                         if binary {
                             imageViewArray[0] = imageView
@@ -368,7 +491,7 @@ class MatchViewController: UIViewController {
                     
                     if rectArray[n].contains(centerPoint) {
                         
-                        print("done: \(done)")
+                 
                         if done.contains(n) {
                             
                             break outerLoop
@@ -380,12 +503,13 @@ class MatchViewController: UIViewController {
                         wordView.text = listOfWordsToUse[indexArray[n]]
                         
                         
-                        wordView.frame = CGRect(x: pointArray[n].x, y: pointArray[n].y, width: tileWidth, height: tileHeight)
-                        wordView.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*10)
+                        wordView.frame = CGRect(x: pointArray[n].x - margin, y: pointArray[n].y, width: tileWidth + margin, height: tileHeight)
+                        wordView.font = UIFont(name: "HelveticaNeue-Bold", size: 10)
                         wordView.alpha = 1.0
                         wordView.textAlignment = .center
                         wordView.textColor = UIColor.white
                         view.addSubview(wordView)
+                         guessNumber += 1
                         if wordLabelArray.count == 0 {
                             wordLabelArray.append(wordView)
                             flipped1 = n
@@ -404,16 +528,20 @@ class MatchViewController: UIViewController {
                         
                         
                         if flipped1 != nil && flipped2 != nil {
-                            print("flip1: \(flipped1)")
-                            print("flip2: \(flipped2)")
-                            print("indexArray[flipped1!]: \(indexArray[flipped1!])")
-                            print("indexArray[flipped2!]: \(indexArray[flipped2!])")
+       
                             if tiles[flipped1!].alpha == 0.0 && tiles[(flipped2!)].alpha == 0.0 {
                                 flippedTiles = 2
                                 
                                 if (indexArray[flipped1!] == indexArray[flipped2!] - tileAmount/2) || (indexArray[flipped1!] == indexArray[flipped2!] + tileAmount/2) {
                                     done.append(flipped1!)
                                     done.append(flipped2!)
+                                    var _score = 50000 - 2*time - 20*(guessNumber - 2*tileAmount)
+                                    if _score < 500 {
+                                        _score = 500
+                                    }
+                                    score += _score
+                                    scoreLabel.text = scoreText
+                                   // scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
                                     flipped1 = nil
                                     flipped2 = nil
                                     
@@ -422,7 +550,11 @@ class MatchViewController: UIViewController {
                                     wordLabelArray[0] = nil
                                     wordLabelArray[1] = nil
                                     flippedTiles = 0
-                                    
+                                    AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                                    if done.count >= tileAmount {
+                                        saveScore()
+                                        endGame()
+                                    }
                                     
                                 }
                             } else {
@@ -462,15 +594,14 @@ class MatchViewController: UIViewController {
                         let wordView = UILabel()
                         
                         wordView.text = listOfWordsToUse[indexArray[n]]
-                        print(wordView.text)
-                        print("indexArray[n]: \(indexArray[n])")
-                        wordView.frame = CGRect(x: pointArray[n].x, y: pointArray[n].y, width: tileWidth, height: tileHeight)
-                        wordView.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*10)
+          
+                        wordView.frame = CGRect(x: pointArray[n].x - margin, y: pointArray[n].y, width: tileWidth + margin, height: tileHeight)
+                        wordView.font = UIFont(name: "HelveticaNeue-Bold", size: 10)
                         wordView.alpha = 1.0
                         wordView.textAlignment = .center
                         wordView.textColor = UIColor.white
                         view.addSubview(wordView)
-                        
+                         guessNumber += 1
                         if binary {
                             wordLabelArray[0] = wordView
                             flipped1 = n
@@ -492,7 +623,7 @@ class MatchViewController: UIViewController {
             }
         }
         
-        if game == "sensible" || game == "rediculous" || game == "idiotic" {
+        if game == "sensible" || game == "ridiculous" || game == "idiotic" {
             switch flippedTiles {
             case 0, 1, 2:
                 centerPoint = gesture.location(in: view)
@@ -511,7 +642,7 @@ class MatchViewController: UIViewController {
                             image = UIImage(named: myItems.listOfImages[indexArray[n] - 2*tileAmount/3])!
                         }
                         let imageView = UIImageView(image: image)
-                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: 125*screenWidth/750, height: 125*screenWidth/750)
+                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: imageWidth, height: imageWidth)
                         imageView.alpha = 1.0
                         
                         //                        if imageViewArray.count == 0 {
@@ -530,31 +661,28 @@ class MatchViewController: UIViewController {
                         if triCount%3 == 1 {
                             imageViewArray[0] = imageView
                             flipped1 = n
-                            print(indexArray[n])
+          
                             triCount += 1
                         } else if triCount%3 == 2 {
                             imageViewArray[1] = imageView
                             flipped2 = n
-                            print(indexArray[n])
+             
                             triCount += 1
                         } else if triCount%3 == 0 {
                             imageViewArray[2] = imageView
                             flipped3 = n
-                            print(indexArray[n])
+               
                             triCount += 1
                         }
                         
                         view.addSubview(imageView)
+                         guessNumber += 1
                         
                         if flipped1 != nil && flipped2 != nil && flipped3 != nil {
                             var flips = [indexArray[flipped1!], indexArray[flipped2!],indexArray[flipped3!]]
-                            //                            print("highest: \(flips[0])")
-                            //                            print("second: \(flips[1])")
-                            //                            print("third: \(flips[2])")
+     
                             flips = flips.sorted { $0 > $1 }
-                            //                            print("after highest: \(flips[0])")
-                            //                            print("after second: \(flips[1])")
-                            //                            print("after third: \(flips[2])")
+                  
                             if tiles[flipped1!].alpha == 0.0 && tiles[(flipped2!)].alpha == 0.0 {
                                 flippedTiles = 2
                             }
@@ -566,11 +694,18 @@ class MatchViewController: UIViewController {
                             }
                             if tiles[flipped1!].alpha == 0.0 && tiles[(flipped2!)].alpha == 0.0 && tiles[(flipped3!)].alpha == 0.0 {
                                 flippedTiles = 3
-                                print("checked for triple match")
+            
                                 if (flips[0] - 2*tileAmount/3 == flips[2]) && (flips[1] - tileAmount/3 == flips[2]) {
                                     done.append(flipped1!)
                                     done.append(flipped2!)
                                     done.append(flipped3!)
+                                    var _score = 50000 - 2*time - 20*(guessNumber - 2*tileAmount)
+                                    if _score < 500 {
+                                        _score = 500
+                                    }
+                                    score += _score
+                                    scoreLabel.text = scoreText
+                                   // scoreLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*70)
                                     flipped1 = nil
                                     flipped2 = nil
                                     flipped3 = nil
@@ -582,7 +717,11 @@ class MatchViewController: UIViewController {
                                     imageViewArray[1] = nil
                                     imageViewArray[2] = nil
                                     flippedTiles = 0
-                                    
+                                    AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+                                    if done.count >= tileAmount {
+                                        saveScore()
+                                        endGame()
+                                    }
                                     
                                 }
                             } else {
@@ -632,24 +771,24 @@ class MatchViewController: UIViewController {
                             image = UIImage(named: myItems.listOfImages[indexArray[n] - 2*tileAmount/3])!
                         }
                         let imageView = UIImageView(image: image)
-                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: 125*screenWidth/750, height: 125*screenWidth/750)
+                        imageView.frame = CGRect(x: pointArray[n].x + gap, y: pointArray[n].y + gap, width: imageWidth, height: imageWidth)
                         imageView.alpha = 1.0
                         view.addSubview(imageView)
-                        
+                         guessNumber += 1
                         if triCount%3 == 1 {
                             imageViewArray[0] = imageView
                             flipped1 = n
-                            print(indexArray[n])
+                    
                             triCount += 1
                         } else if triCount%3 == 2 {
                             imageViewArray[1] = imageView
                             flipped2 = n
-                            print(indexArray[n])
+                
                             triCount += 1
                         } else if triCount%3 == 0 {
                             imageViewArray[2] = imageView
                             flipped3 = n
-                            print(indexArray[n])
+               
                             triCount += 1
                         }
                         flippedTiles = 1
@@ -669,26 +808,24 @@ class MatchViewController: UIViewController {
     private func selectItems() {
         var allNumbers = [Int]()
         var m: Int = 0
-        print("game: \(game)")
+
         if game == "sensible" || game == "sanity" {
             m = Int(arc4random_uniform(UInt32(175)))
         }
-        if game == "rediculous" || game == "absurd" {
+        if game == "ridiculous" || game == "absurd" {
             m = Int(arc4random_uniform(UInt32(100)))
         }
-        if game == "sensible" || game == "rediculous" || game == "idiotic" {
+        if game == "sensible" || game == "ridiculous" || game == "idiotic" {
             for i in m..<(m+tileAmount/3) {
                 allNumbers.append(i)
             }
-            print("m: \(m)")
-            print("allNumbers: \(allNumbers)")
-            for i in m..<(m+tileAmount/3) {
+     
+            for _ in m..<(m+tileAmount/3) {
                 
                 let randomNumber = Int(arc4random_uniform(UInt32(allNumbers.count)))
-                print("allNumbers.count: \(allNumbers.count)")
+           
                 if let index = allNumbers.index(of: allNumbers[randomNumber]) {
-                    print("boo")
-                    print(i)
+     
                     listOfImagesToUse.append(myItems.listOfImages[allNumbers[randomNumber]])
                     allNumbers.remove(at: index)
                 }
@@ -714,30 +851,30 @@ class MatchViewController: UIViewController {
             }
         }
         if game == "wise" {
-            for i in 0..<43 {
+            for i in 0..<21 {
                 listOfWordsToUse.append(myItems.listOfWords[i])
             }
-            for i in 380..<423 {
+            for i in 380..<401 {
                 listOfWordsToUse.append(myItems.listOfWords[i])
             }
         }
         if game == "farcical" {
             
             for i in 0..<120 {
-                listOfWordsToUse.append(myItems.listOfWords[i+35])
+                listOfWordsToUse.append(myItems.listOfWords[i+21])
             }
             for i in 380..<500 {
-                listOfWordsToUse.append(myItems.listOfWords[i+35])
+                listOfWordsToUse.append(myItems.listOfWords[i+21])
             }
             
         }
         if game == "foolish" {
             
             for i in 0..<225 {
-                listOfWordsToUse.append(myItems.listOfWords[i+155])
+                listOfWordsToUse.append(myItems.listOfWords[i+141])
             }
             for i in 380..<605 {
-                listOfWordsToUse.append(myItems.listOfWords[i+155])
+                listOfWordsToUse.append(myItems.listOfWords[i+141])
             }
         }
     }
@@ -755,257 +892,14 @@ class MatchViewController: UIViewController {
                 indexArray.append(allNumbers[randomNumber])
                 allNumbers.remove(at: index)
             }
-            
-            
-            
         }
         
     }
-    
-    
-    
-    
-    
     
     @objc private func menu(_ sender: UIButton) {
         self.performSegue(withIdentifier: "toMenuFromMatch", sender: self)
     }
     
-    private func buyBonuses() {
-        //IAP
-    }
-    
-    
-    private func sanityLevel(_ sender: UIButton) {
-        y = 4
-        z = 6
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        done.removeAll()
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: screenWidth, height: screenHeight)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    private func absurdLevel(_ sender: UIButton) {
-        y = 14
-        z = 15
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        done.removeAll()
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 4.08*screenWidth)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    
-    private func insaneLevel(_ sender: UIButton) {
-        y = 14
-        z = 29
-        done.removeAll()
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 4.08*screenWidth)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    
-    private func wiseLevel(_ sender: UIButton) {
-        y = 4
-        z = 6
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        done.removeAll()
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: screenWidth, height: screenHeight)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    private func farcicalLevel(_ sender: UIButton) {
-        y = 14
-        z = 15
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        done.removeAll()
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 4.08*screenWidth)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    
-    private func foolishLevel(_ sender: UIButton) {
-        y = 14
-        z = 29
-        done.removeAll()
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 4.08*screenWidth)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    
-    private func sensibleLevel(_ sender: UIButton) {
-        y = 4
-        z = 6
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        done.removeAll()
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: screenWidth, height: screenHeight)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    private func rediculousLevel(_ sender: UIButton) {
-        y = 14
-        z = 15
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        done.removeAll()
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 4.08*screenWidth)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
-    
-    private func idioticLevel(_ sender: UIButton) {
-        y = 14
-        z = 29
-        done.removeAll()
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        tileAmount = (y+1)*(z+1)
-        rectArray.removeAll()
-        pointArray.removeAll()
-        indexArray.removeAll()
-        tiles.removeAll()
-        tilesColors.removeAll()
-        imageViewArray.removeAll()
-        self.scrollView.contentSize = CGSize(width: 2.9*screenWidth, height: 4.08*screenWidth)
-        addLabels()
-        organizeIndex()
-        selectItems()
-        binary = true
-        flippedTiles = 0
-        flipped1 = nil
-        flipped2 = nil
-        done.append(500)
-        
-    }
     //coredata functions
     
     private func deleteAllData(entity: String)
@@ -1020,9 +914,9 @@ class MatchViewController: UIViewController {
     
     private func saveLevel() {
         var index = [Int]()
-        var bool = [Int]()
+        var booleans = [Int]()
         var list = [String]()
-        bool = done
+        booleans = done
         for i in 0..<tileAmount {
             index.append(indexArray[i])
             if game == "wise" || game == "farcical" || game == "foolish" {
@@ -1046,8 +940,10 @@ class MatchViewController: UIViewController {
         
         let entity = NSEntityDescription.insertNewObject(forEntityName: gameData, into: context)
         entity.setValue(index, forKey: "index")
-        entity.setValue(bool, forKey: "bool")
+        entity.setValue(booleans, forKey: "bool")
         entity.setValue(list, forKey: "list")
+        entity.setValue(score, forKey: "score")
+        entity.setValue(time, forKey: "time")
         do {
             try context.save()
         } catch {
@@ -1058,13 +954,32 @@ class MatchViewController: UIViewController {
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
-        print("levelSaved")
+
         saveLevel()
     }
     
+    private func saveScore() {
+        let appDel = UIApplication.shared.delegate as! AppDelegate
+        let context = appDel.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.insertNewObject(forEntityName: "HighScores", into: context)
+        entity.setValue(score, forKey: game)
+ 
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+    }
     
     //coredata functions end
     
+    private func endGame() {
+        //display things when you win the game
+    }
     
 }
 

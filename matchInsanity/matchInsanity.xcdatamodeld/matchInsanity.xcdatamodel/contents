@@ -4,68 +4,96 @@
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Farcical" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Foolish" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="HighScores" syncable="YES">
+        <attribute name="absurd" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="farcical" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="foolish" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="idiotic" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="insane" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ridiculous" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="sanity" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="sensible" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="wise" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Idiotic" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Insane" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
-    <entity name="Rediculous" syncable="YES">
+    <entity name="Purchase" syncable="YES">
+        <attribute name="score" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="triple" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="word" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Ridiculous" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Sanity" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
-    </entity>
-    <entity name="Score" syncable="YES">
-        <attribute name="didPay" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Sensible" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
-    <entity name="Triple" syncable="YES">
-        <attribute name="didPay" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+    <entity name="Tutorial" syncable="YES">
+        <attribute name="startTutorial" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <entity name="Wise" syncable="YES">
         <attribute name="bool" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="list" optional="YES" attributeType="Transformable" syncable="YES"/>
-    </entity>
-    <entity name="Word" syncable="YES">
-        <attribute name="didPay" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Score" positionX="-63" positionY="-18" width="128" height="60"/>
-        <element name="Triple" positionX="-54" positionY="-9" width="128" height="60"/>
-        <element name="Word" positionX="-36" positionY="9" width="128" height="60"/>
-        <element name="Sanity" positionX="-18" positionY="27" width="128" height="90"/>
-        <element name="Rediculous" positionX="0" positionY="45" width="128" height="90"/>
-        <element name="Idiotic" positionX="18" positionY="63" width="128" height="90"/>
-        <element name="Sensible" positionX="36" positionY="81" width="128" height="90"/>
-        <element name="Foolish" positionX="-9" positionY="36" width="128" height="90"/>
-        <element name="Farcical" positionX="0" positionY="45" width="128" height="90"/>
-        <element name="Wise" positionX="9" positionY="54" width="128" height="90"/>
-        <element name="Insane" positionX="18" positionY="63" width="128" height="90"/>
-        <element name="Absurd" positionX="27" positionY="72" width="128" height="90"/>
+        <element name="Absurd" positionX="27" positionY="72" width="128" height="120"/>
+        <element name="Farcical" positionX="0" positionY="45" width="128" height="120"/>
+        <element name="Foolish" positionX="-9" positionY="36" width="128" height="120"/>
+        <element name="HighScores" positionX="0" positionY="81" width="128" height="180"/>
+        <element name="Idiotic" positionX="18" positionY="63" width="128" height="120"/>
+        <element name="Insane" positionX="18" positionY="63" width="128" height="120"/>
+        <element name="Purchase" positionX="-54" positionY="-9" width="128" height="90"/>
+        <element name="Ridiculous" positionX="0" positionY="45" width="128" height="120"/>
+        <element name="Sanity" positionX="-18" positionY="27" width="128" height="120"/>
+        <element name="Sensible" positionX="36" positionY="81" width="128" height="120"/>
+        <element name="Tutorial" positionX="-9" positionY="54" width="128" height="60"/>
+        <element name="Wise" positionX="9" positionY="54" width="128" height="120"/>
     </elements>
 </model>

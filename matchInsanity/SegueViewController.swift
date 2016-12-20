@@ -22,6 +22,12 @@ class SegueViewController: UIViewController {
     var index = [Int]()
     var done = [Int]()
     var isNewBoard: Int = 0
+    var score = Int()
+    var time = Int()
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if goBack {
@@ -36,6 +42,8 @@ class SegueViewController: UIViewController {
             gameView.list = list
             gameView.index = index
             gameView.done = done
+            gameView.score = score
+            gameView.time = time
             
         }
     }
@@ -47,7 +55,7 @@ class SegueViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //        modalPresentationStyle = .overCurrentContext
-        view.backgroundColor = UIColor(red: 23/255, green: 23/255, blue: 23/255, alpha: 0.85)
+        view.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 42/255, alpha: 0.85)
         let arrow = UIButton()
         arrow.frame = CGRect(x: 329*screenWidth/750, y: 41*screenHeight/1332, width: 93*screenWidth/750, height: 76*screenWidth/750)
         arrow.setImage(UIImage(named: "Arrow.png"), for: .normal)
@@ -61,6 +69,9 @@ class SegueViewController: UIViewController {
         menuLabel.frame.origin.y = (95/1332)*screenHeight
         menuLabel.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*75)
         menuLabel.text = "Menu"
+         if UIDevice.current.userInterfaceIdiom == .pad {
+            menuLabel.frame.size = CGSize( width: screenWidth, height: (224/1332)*screenHeight)
+        }
         menuLabel.textAlignment = .center
         menuLabel.textColor = UIColor(red: 35/255, green: 35/255, blue: 35/255, alpha: 1.0)
         view.addSubview(menuLabel)
@@ -101,15 +112,13 @@ class SegueViewController: UIViewController {
         same.layer.cornerRadius = 5.0
         same.clipsToBounds = true
         self.view.addSubview(same)
-        
-        
-        print("done: \(done)")
+    
         
         // Do any additional setup after loading the view.
     }
     
     @objc private func menu(_ sender: UIButton) {
-        print("Went1")
+   
         goBack = true
         self.performSegue(withIdentifier: "toMenuFromSegue", sender: self)
     }
@@ -123,21 +132,26 @@ class SegueViewController: UIViewController {
         catch { print(error) }
     }
     @objc private func reset(_ sender: UIButton) {
-        print("Went2")
+ 
         isNewBoard = 1
-         print("isNewBoard1: \(isNewBoard)")
+  
         deleteAllData(entity: gameData)
         done.removeAll()
         index.removeAll()
         list.removeAll()
-         print("isNewBoard2: \(isNewBoard)")
+   
+        score = 0
+        time = 0
         self.performSegue(withIdentifier: "toMatchFromSegue", sender: self)
+
 
         
     }
     @objc private func same(_ sender: UIButton) {
-        print("Went3")
+  
         isNewBoard = 0
+        
+        
         self.performSegue(withIdentifier: "toMatchFromSegue", sender: self)
     }
     

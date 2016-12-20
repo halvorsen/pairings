@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06A002CD1E044AA100EEE3DE /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002CC1E044AA100EEE3DE /* StoreKit.framework */; };
+		06A002CF1E044AA500EEE3DE /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002CE1E044AA500EEE3DE /* GameKit.framework */; };
+		06A002D31E044CAC00EEE3DE /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002D11E044CAC00EEE3DE /* Fabric.framework */; };
+		06A002D41E044CAC00EEE3DE /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002D21E044CAC00EEE3DE /* Crashlytics.framework */; };
 		06C4A4151DEBD29900433FC2 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C4A4141DEBD29900433FC2 /* MenuViewController.swift */; };
 		06C4A4171DEBD2A700433FC2 /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C4A4161DEBD2A700433FC2 /* IAPViewController.swift */; };
 		06D53D951DDF4C9C008E91D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D53D941DDF4C9C008E91D5 /* AppDelegate.swift */; };
@@ -18,9 +22,14 @@
 		06E961AC1DF89E5E0028FC35 /* SegueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06E961AB1DF89E5E0028FC35 /* SegueViewController.swift */; };
 		06E961AF1DF8D6BF0028FC35 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06E961AD1DF8D6BF0028FC35 /* Main.storyboard */; };
 		06FB850D1DF5ED5F002CF55D /* ScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FB850C1DF5ED5E002CF55D /* ScoreViewController.swift */; };
+		5D519A9A5FAC442AD2DC49EF /* Pods_matchInsanity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56298F049C8710F99C8EFB29 /* Pods_matchInsanity.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		06A002CC1E044AA100EEE3DE /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		06A002CE1E044AA500EEE3DE /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		06A002D11E044CAC00EEE3DE /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		06A002D21E044CAC00EEE3DE /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		06C4A4141DEBD29900433FC2 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		06C4A4161DEBD2A700433FC2 /* IAPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
 		06D53D911DDF4C9C008E91D5 /* matchInsanity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = matchInsanity.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,6 +43,9 @@
 		06E961AB1DF89E5E0028FC35 /* SegueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueViewController.swift; sourceTree = "<group>"; };
 		06E961AE1DF8D6BF0028FC35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		06FB850C1DF5ED5E002CF55D /* ScoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreViewController.swift; sourceTree = "<group>"; };
+		2B7C527F8D7B134917008D01 /* Pods-matchInsanity.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-matchInsanity.release.xcconfig"; path = "Pods/Target Support Files/Pods-matchInsanity/Pods-matchInsanity.release.xcconfig"; sourceTree = "<group>"; };
+		56298F049C8710F99C8EFB29 /* Pods_matchInsanity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_matchInsanity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D2547292197F9E05B8B6DDA /* Pods-matchInsanity.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-matchInsanity.debug.xcconfig"; path = "Pods/Target Support Files/Pods-matchInsanity/Pods-matchInsanity.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +53,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06A002CF1E044AA500EEE3DE /* GameKit.framework in Frameworks */,
+				06A002D41E044CAC00EEE3DE /* Crashlytics.framework in Frameworks */,
+				5D519A9A5FAC442AD2DC49EF /* Pods_matchInsanity.framework in Frameworks */,
+				06A002CD1E044AA100EEE3DE /* StoreKit.framework in Frameworks */,
+				06A002D31E044CAC00EEE3DE /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +69,8 @@
 			children = (
 				06D53D931DDF4C9C008E91D5 /* matchInsanity */,
 				06D53D921DDF4C9C008E91D5 /* Products */,
+				91A58EB563F659F94756607F /* Pods */,
+				0E1D684A281A1931830C5BC7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,10 +95,31 @@
 				06FB850C1DF5ED5E002CF55D /* ScoreViewController.swift */,
 				06D53D9E1DDF4C9C008E91D5 /* Assets.xcassets */,
 				06D53DA01DDF4C9C008E91D5 /* LaunchScreen.storyboard */,
+				06A002D11E044CAC00EEE3DE /* Fabric.framework */,
+				06A002D21E044CAC00EEE3DE /* Crashlytics.framework */,
 				06D53DA31DDF4C9C008E91D5 /* Info.plist */,
 				06D53D9B1DDF4C9C008E91D5 /* matchInsanity.xcdatamodeld */,
 			);
 			path = matchInsanity;
+			sourceTree = "<group>";
+		};
+		0E1D684A281A1931830C5BC7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				06A002CE1E044AA500EEE3DE /* GameKit.framework */,
+				06A002CC1E044AA100EEE3DE /* StoreKit.framework */,
+				56298F049C8710F99C8EFB29 /* Pods_matchInsanity.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		91A58EB563F659F94756607F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9D2547292197F9E05B8B6DDA /* Pods-matchInsanity.debug.xcconfig */,
+				2B7C527F8D7B134917008D01 /* Pods-matchInsanity.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -89,10 +129,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 06D53DA61DDF4C9C008E91D5 /* Build configuration list for PBXNativeTarget "matchInsanity" */;
 			buildPhases = (
+				9ACF4E4B50AB58377AB90B0B /* [CP] Check Pods Manifest.lock */,
 				06D53D8D1DDF4C9C008E91D5 /* Sources */,
 				06D53D8E1DDF4C9C008E91D5 /* Frameworks */,
 				06D53D8F1DDF4C9C008E91D5 /* Resources */,
-				06D53DA91DDF4CC7008E91D5 /* Build Count */,
+				E3A012C74939E48984FB0D58 /* [CP] Embed Pods Frameworks */,
+				831E2F4443514AA14310E858 /* [CP] Copy Pods Resources */,
+				06A002D01E044C7100EEE3DE /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -117,6 +160,14 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = PFDY3PS57G;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -152,19 +203,64 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		06D53DA91DDF4CC7008E91D5 /* Build Count */ = {
+		06A002D01E044C7100EEE3DE /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Build Count";
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
+			shellScript = "./Fabric.framework/run a9cc3c114b202ec31390e423f8db307328800a9f 8999b85b5b17d0926cf3c5c45657aee0032aa33c613d4bf7779c97b9eaefdeca";
+		};
+		831E2F4443514AA14310E858 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-matchInsanity/Pods-matchInsanity-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9ACF4E4B50AB58377AB90B0B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E3A012C74939E48984FB0D58 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-matchInsanity/Pods-matchInsanity-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -301,9 +397,15 @@
 		};
 		06D53DA71DDF4C9C008E91D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9D2547292197F9E05B8B6DDA /* Pods-matchInsanity.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/matchInsanity",
+				);
 				INFOPLIST_FILE = matchInsanity/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.halvorsen.pairings;
@@ -314,9 +416,15 @@
 		};
 		06D53DA81DDF4C9C008E91D5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2B7C527F8D7B134917008D01 /* Pods-matchInsanity.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = PFDY3PS57G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/matchInsanity",
+				);
 				INFOPLIST_FILE = matchInsanity/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.halvorsen.pairings;
