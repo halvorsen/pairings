@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import StoreKit
 import SwiftyStoreKit
+import GCHelper
 
 class MenuViewController: UIViewController {
     let screenWidth = UIScreen.main.bounds.width
@@ -40,8 +41,61 @@ class MenuViewController: UIViewController {
     var time: Int = 0
     var purchase = String()
     var didDataLoad = false
+    var annotations = ["Sanity", "Absurd", "Insane", "Wise", "Farcical", "Foolish", "Sensible", "Ridiculous", "Idiotic","0","0","0","0","0","0","0","0","0"]
+    var levels = ["sanity", "absurd", "insane", "wise", "farcical", "foolish", "sensible", "ridiculous", "idiotic"]
+    var array = [Int]()
+    var highScores: [Int] = [0,0,0,0,0,0,0,0,0]
     
-    //IAP
+    //GC
+    
+    private func loadDataGC() {
+        print("loaddata")
+        var resultsScoreRequest = [AnyObject]()
+        let appDel = (UIApplication.shared.delegate as! AppDelegate)
+        let context = appDel.persistentContainer.viewContext
+        
+        let scoreRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "HighScores")
+        
+        do { resultsScoreRequest = try context.fetch(scoreRequest) } catch  {
+            print("Could not cache the response \(error)")
+        }
+        
+        if resultsScoreRequest.count > 0 {
+            
+            for i in 0...8 {
+                
+                //   var score: Int? = 0
+                var maxNumber: Int
+                for result in resultsScoreRequest {
+                    if let score = result.value(forKey: levels[i]) as! Int? {
+                        
+                        array.append(score)
+                    }
+                    
+                }
+                if array.count > 0 {
+                    maxNumber = array.max()!
+                    annotations[i+9] = String(maxNumber)
+                    print("maxscore")
+                    print(maxNumber)
+                    print("i: \(i)")
+                    highScores[i] = maxNumber
+                }
+                array.removeAll()
+                
+            }
+        }
+    }
+    
+    private func addDataToGameCenter() {
+        
+        for i in 0...8 {
+            if highScores[i] > 0 {
+                GCHelper.sharedInstance.reportLeaderboardIdentifier(annotations[i], score: highScores[i])
+            }
+        }
+        
+    }
     
     //IAP
     
@@ -215,10 +269,8 @@ class MenuViewController: UIViewController {
         game = "sanity"
         shouldIDoTutorial()
         loadLevelAccess()
-        print("unlock?:")
-        print("unlockword: \(unlockedWord)")
-        print(unlockedTriple)
-        print(unlockedScore)
+        loadDataGC()
+        addDataToGameCenter()
         
     }
     
