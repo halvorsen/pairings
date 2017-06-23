@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0692117C1EFCC62F000953BA /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0692117B1EFCC62F000953BA /* TutorialViewController.swift */; };
 		06A002CD1E044AA100EEE3DE /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002CC1E044AA100EEE3DE /* StoreKit.framework */; };
 		06A002CF1E044AA500EEE3DE /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002CE1E044AA500EEE3DE /* GameKit.framework */; };
 		06A002D31E044CAC00EEE3DE /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A002D11E044CAC00EEE3DE /* Fabric.framework */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0692117B1EFCC62F000953BA /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TutorialViewController.swift; path = ../TutorialViewController.swift; sourceTree = "<group>"; };
 		06A002CC1E044AA100EEE3DE /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		06A002CE1E044AA500EEE3DE /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		06A002D11E044CAC00EEE3DE /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				06D53D941DDF4C9C008E91D5 /* AppDelegate.swift */,
+				0692117B1EFCC62F000953BA /* TutorialViewController.swift */,
 				06D53D961DDF4C9C008E91D5 /* MatchViewController.swift */,
 				06C4A4141DEBD29900433FC2 /* MenuViewController.swift */,
 				06C4A4161DEBD2A700433FC2 /* IAPViewController.swift */,
@@ -153,7 +156,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Aaron Halvorsen";
 				TargetAttributes = {
 					06D53D901DDF4C9C008E91D5 = {
@@ -270,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06FB850D1DF5ED5F002CF55D /* ScoreViewController.swift in Sources */,
+				0692117C1EFCC62F000953BA /* TutorialViewController.swift in Sources */,
 				06D53D971DDF4C9C008E91D5 /* MatchViewController.swift in Sources */,
 				06C4A4151DEBD29900433FC2 /* MenuViewController.swift in Sources */,
 				06D53D951DDF4C9C008E91D5 /* AppDelegate.swift in Sources */,
@@ -320,6 +324,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -370,6 +375,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -399,8 +405,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9D2547292197F9E05B8B6DDA /* Pods-matchInsanity.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = PFDY3PS57G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -418,8 +426,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2B7C527F8D7B134917008D01 /* Pods-matchInsanity.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = PFDY3PS57G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

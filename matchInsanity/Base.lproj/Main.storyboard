@@ -1,11 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="NUg-l3-9En">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="NUg-l3-9En">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Tutorial View Controller-->
+        <scene sceneID="WBc-Dv-pzl">
+            <objects>
+                <viewController id="1Ij-8k-rGq" customClass="TutorialViewController" customModule="matchInsanity" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="d3c-vE-kPZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="qxw-FK-7ok"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="YUZ-Q3-vkJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="NUg-l3-9En" kind="show" identifier="fromTutorialToMenu" id="MDc-ww-v2q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LL2-AD-3aD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2036" y="483"/>
+        </scene>
         <!--Menu View Controller-->
         <scene sceneID="SbF-Of-XY5">
             <objects>
@@ -24,6 +48,7 @@
                         <segue destination="pLD-sT-Si4" kind="show" identifier="toIAPFromMenu" id="xMd-zD-krC"/>
                         <segue destination="mXL-D0-24A" kind="show" identifier="toSegueFromMenu" id="gBw-yY-17k"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="toMatchFromMenu" id="vDf-hQ-l0M"/>
+                        <segue destination="1Ij-8k-rGq" kind="show" identifier="fromMenuToTutorial" id="Gpn-Iq-oOu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GIQ-i6-tZo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -117,7 +142,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="j2h-1d-aku"/>
+        <segue reference="MDc-ww-v2q"/>
         <segue reference="vDf-hQ-l0M"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -32,7 +32,7 @@ class MenuViewController: UIViewController {
     var index = [Int]()
     var isToSegue = false
     var isToMatch = false
-    var startTutorialBool = false
+ //   var startTutorialBool = false
     let levelsData = ["Sanity", "Absurd", "Insane", "Wise", "Farcical", "Foolish", "Sensible", "Ridiculous", "Idiotic"]
     var unlockedWord = false
     var unlockedTriple = false
@@ -274,6 +274,21 @@ class MenuViewController: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.bool(forKey: "launchedPairingsGameBefore") {
+            print("Not first launch.")
+            
+        } else {
+            let myView = UIView()
+            myView.backgroundColor = .black
+            myView.frame = view.bounds
+            view.addSubview(myView)
+            UserDefaults.standard.set(true, forKey: "launchedPairingsGameBefore")
+            self.performSegue(withIdentifier: "fromMenuToTutorial", sender: self)
+            
+        }
+    }
+    
     
     @objc private func scores(_ sender: UIButton) {
         if unlockedScore {
@@ -415,6 +430,7 @@ class MenuViewController: UIViewController {
             button.titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*14)
             button.setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0), for: .normal)
             button.addTarget(self, action: #selector(MenuViewController.segueMatch(_:)), for: .touchUpInside)
+            
             self.view.addSubview(button)
         }
     }
@@ -424,29 +440,52 @@ class MenuViewController: UIViewController {
         nextAnnotation()
         
     }
+    var ant: String = ""
     var buttons = [UIButton]()
     var annotation = UILabel()
     private func nextAnnotation() {
         switch step {
         case 0:
             
-            annotation.frame.size = CGSize( width: (500/750)*screenWidth, height: (200/1332)*screenHeight)
+            annotation.frame.size = CGSize( width: (500/750)*screenWidth, height: (334/1332)*screenHeight)
             annotation.frame.origin.x = (125/750)*screenWidth
             annotation.frame.origin.y = (1000/1332)*screenHeight
             annotation.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*16)
-            annotation.text = "Welcome to PAIRINGS 1.0, where we are taking matching games to a whole new level!"
+            annotation.text = "Welcome to PAIRINGS, where we are taking matching games to a whole new level!\n\nFind the matches under the tiles above..."
             annotation.textAlignment = .center
             annotation.numberOfLines = 0
             annotation.textColor = UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 1.0)
             view.addSubview(annotation)
         case 1:
-            annotation.text = "If you love a challenge, jigsaw puzzles, crosswords, you've come to the right place."
-            
+            annotation.text = ant
         case 2:
-            annotation.text = "We know you're smart, which is why we know you're up for a difficult challenge!"
+            annotation.text = "\n\n\n\nWell not so easy when there's 100s of pairs to find!!!"
+            for wor in wordz {
+                wor.removeFromSuperview()
+            }
+            for im in imagez {
+                im.removeFromSuperview()
+            }
+            annotation.layer.zPosition = 10000  //layer.zposition = 10000
+            pop()
+            
+                for t in tiles {
+                    let random = Double(arc4random_uniform(4))
+                    UIView.animate(withDuration: random + 2) {
+                    t.frame.origin.y += 2000*UIScreen.main.bounds.height/1332 + 3
+                }
+            }
         case 3:
-            annotation.text = "Now for a quick tour..."
+            annotation.text = "If you love a challenge, jigsaw puzzles, crosswords, you've come to the right place."
+            for t in tiles {
+                t.removeFromSuperview()
+            }
+            
         case 4:
+            annotation.text = "We know you're smart, which is why we know you're up for a difficult challenge!"
+        case 5:
+            annotation.text = "Now for a quick tour..."
+        case 6:
             for i in 0...8 {
                 let button = UIButton()
                 button.frame.size = CGSize( width: (200/750)*screenWidth, height: (28/750)*screenWidth)
@@ -464,7 +503,7 @@ class MenuViewController: UIViewController {
                 }
             }
             annotation.text = "These levels play like a traditional match game, but with a twist. There are lots of tiles to search."
-        case 5:
+        case 7:
             for i in 0...2 {
                 buttons[i].setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 0.2), for: .normal)
                 buttons[i].titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*14)
@@ -474,7 +513,7 @@ class MenuViewController: UIViewController {
                 buttons[i].titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
             }
             annotation.text = "These levels have you find word pairings. How are the words paired?... Wouldn't you like to know."
-        case 6:
+        case 8:
             for i in 3...5 {
                 buttons[i].setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 0.2), for: .normal)
                 buttons[i].titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*14)
@@ -484,13 +523,13 @@ class MenuViewController: UIViewController {
                 buttons[i].titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*17)
             }
             annotation.text = "Search for sets of three symbols, challenging your memory and putting your problem solving to the test."
-        case 7:
+        case 9:
             for i in 6...8 {
                 buttons[i].setTitleColor(UIColor(red: 215/255, green: 215/255, blue: 215/255, alpha: 0.2), for: .normal)
                 buttons[i].titleLabel!.font = UIFont(name: "HelveticaNeue-Bold", size: fontSizeMultiplier*14)
             }
             annotation.text = "Finally, keep track of highscores which award you for accuracy and speed."
-        case 8:
+        case 10:
             annotation.text = "Thanks for playing, enjoy!"
         default:
             endTutorial()
@@ -498,8 +537,233 @@ class MenuViewController: UIViewController {
         }
         
     }
-    
+    var frontMargin = 10*UIScreen.main.bounds.width/750
+    var topMargin = -1979*UIScreen.main.bounds.height/1332 + 3
+    var tileWidth = (UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/5
+    var tileHeight = (UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/5
+    var gap = (UIScreen.main.bounds.width - 60*UIScreen.main.bounds.width/750)/50
+    var margin = 10*UIScreen.main.bounds.width/750
+
+    func pop() {
+        for i in 0...4 {
+            for j in 0...7 {
+                let tile = UILabel()
+                tiles.append(tile)
+                tile.frame.size = CGSize( width: tileWidth, height: tileHeight)
+                
+                tile.frame.origin.x = frontMargin + CGFloat(i)*(tileWidth + margin)
+                
+                if UIDevice.current.userInterfaceIdiom != .pad && game == "wise" {
+                    tile.frame.origin.x = frontMargin + CGFloat(i)*(tileWidth + margin)
+                }
+                tile.frame.origin.y = topMargin + CGFloat(j)*(tileHeight + margin)
+                let point = CGPoint(x: tile.frame.origin.x, y: tile.frame.origin.y)
+                pointArray.append(point)
+             
+                let randomNumber = Int(arc4random_uniform(6))
+                tilesColors.append(randomNumber)
+                let alpha: CGFloat = 0.85
+                switch randomNumber {
+                    
+                case 0: //red
+                    tile.backgroundColor = UIColor(red: 236/255, green: 72/255, blue: 81/255, alpha: alpha)
+                case 1: //orange
+                    tile.backgroundColor = UIColor(red: 245/255, green: 133/255, blue: 57/255, alpha: alpha)
+                case 2: //yellow
+                    tile.backgroundColor = UIColor(red: 248/255, green: 223/255, blue: 74/255, alpha: alpha)
+                case 3: //green
+                    tile.backgroundColor = UIColor(red: 157/255, green: 206/255, blue: 92/255, alpha: alpha)
+                case 4: //green
+                    tile.backgroundColor = UIColor(red: 245/255, green: 133/255, blue: 57/255, alpha: alpha)
+                case 5: //orange
+                    tile.backgroundColor = UIColor(red: 248/255, green: 223/255, blue: 74/255, alpha: alpha)
+                    
+                default:
+                    break
+                }
+                
+                
+                
+                    tile.layer.cornerRadius = 5.0
+                
+                tile.clipsToBounds = true
+                rectArray.append(tile.frame)
+                self.view.addSubview(tile)
+                
+            }
+        }
+    }
+    var total = 0
+    var count = 0
+    var first = 99
+    var second = 99
+    @objc private func pick(_ gesture: UIGestureRecognizer) {
+        if count == 2 {
+            count = 0
+            self.tiles[first].alpha = 1.0
+            self.tiles[second].alpha = 1.0
+            switch first {
+            case 0: self.tiles[first].alpha = 0.0
+            case 1: self.wordz[0].alpha = 0.0
+            case 2: self.imagez[1].alpha = 0.0
+            case 3: self.wordz[1].alpha = 0.0
+            case 4: self.wordz[2].alpha = 0.0
+            case 5: self.wordz[3].alpha = 0.0
+            default: break
+            }
+            switch second {
+            case 0: self.imagez[0].alpha = 0.0
+            case 1: self.wordz[0].alpha = 0.0
+            case 2: self.imagez[1].alpha = 0.0
+            case 3: self.wordz[1].alpha = 0.0
+            case 4: self.wordz[2].alpha = 0.0
+            case 5: self.wordz[3].alpha = 0.0
+            default: break
+            }
+        }
+        
+        for i in 0..<tiles.count {
+            let p = gesture.location(in: self.view)
+            if tiles[i].frame.contains(p) {
+                UIView.animate(withDuration: 0.2) {
+                if self.tiles[i].alpha == 0.0 {
+                    self.tiles[i].alpha = 1.0
+                    switch i {
+                    case 0: self.imagez[0].alpha = 0.0
+                    case 1: self.wordz[0].alpha = 0.0
+                    case 2: self.imagez[1].alpha = 0.0
+                    case 3: self.wordz[1].alpha = 0.0
+                    case 4: self.wordz[2].alpha = 0.0
+                    case 5: self.wordz[3].alpha = 0.0
+                    default: break
+                    }
+                } else {
+                    self.tiles[i].alpha = 0.0
+                    if self.count == 0 { self.first = i }
+                    if self.count == 1 { self.second = i }
+                    self.count += 1
+                    switch i {
+                    case 0: self.imagez[0].alpha = 1.0
+                    case 1: self.wordz[0].alpha = 1.0
+                    case 2: self.imagez[1].alpha = 1.0
+                    case 3: self.wordz[1].alpha = 1.0
+                    case 4: self.wordz[2].alpha = 1.0
+                    case 5: self.wordz[3].alpha = 1.0
+                    default: break
+                    }
+                }
+                }
+            
+            
+            if count == 2 {
+                if first == 0 && second == 2 || second == 0 && first == 2 {
+                    step = 1; ant = "Images that match are pairs"; nextAnnotation()
+                    tiles[first].removeFromSuperview(); tiles[second].removeFromSuperview(); count = 0; total += 1
+                } else if first == 1 && second == 3 || second == 1 && first == 3 {
+                    step = 1; ant = "These words match because they have something in common (both are names of late night TV hosts)"; nextAnnotation(); total += 1
+                    tiles[first].removeFromSuperview(); tiles[second].removeFromSuperview(); count = 0
+                } else if first == 4 && second == 5 || second == 4 && first == 5 {
+                 step = 1; ant = "These words match because they have something in common (legal spelled backwards: legal)"; nextAnnotation(); total += 1
+                    tiles[first].removeFromSuperview(); tiles[second].removeFromSuperview(); count = 0
+                }
+                print(total)
+                if total == 3 {
+                    let te = annotation.text!
+                    annotation.text = "\(te)\nEasy enough, right?\nTAP ANYWHERE TO CONTINUE"
+                    tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.respondToTapGesture(_:)))
+                    self.view.addGestureRecognizer(tap)
+                }
+            }
+            }
+        }
+    }
+    var tiles = [UILabel]() //save tile
+    var tilesColors = [Int]() //save color number for each tile
+    var pointArray = [CGPoint]()
+    var rectArray = [CGRect]()
+    var wordz = [UILabel]()
+    var imagez = [UIImageView]()
+    var tap = UITapGestureRecognizer()
+    //var tap2 = UITapGestureRecognizer()
     private func startTutorial() {
+        
+          tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.pick(_:)))
+          self.view.addGestureRecognizer(tap)
+       
+        for i in 0...5 {
+            if i == 1 || 3...5 ~= i {
+            let wordView = UILabel()
+            let words = ["","Kimmel","","Fallon","Regal","Lager"]
+            wordView.text = words[i]
+         
+            wordView.frame = CGRect(x: 60*screenWidth/750 + CGFloat(i)*(100*screenWidth/750 + 10*screenWidth/750), y: 110*screenHeight/1334, width: 80*screenWidth/750, height: 80*screenWidth/750)
+            wordView.font = UIFont(name: "HelveticaNeue-Bold", size: 10)
+            wordView.alpha = 0.0
+            wordView.textAlignment = .center
+            wordView.textColor = UIColor.white
+                
+            view.addSubview(wordView)
+            wordz.append(wordView)
+            } else {
+            let image = UIImage(named: "99.png")!
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 60*screenWidth/750 + CGFloat(i)*(100*screenWidth/750 + 10*screenWidth/750), y: 110*screenHeight/1334, width: 80*screenWidth/750, height: 80*screenWidth/750)
+            imageView.alpha = 0.0
+                imagez.append(imageView)
+            view.addSubview(imageView)
+            }
+          
+                let tile = UILabel()
+                tiles.append(tile)
+                tile.frame.size = CGSize( width: 100*screenWidth/750, height: 100*screenWidth/750)
+                
+                tile.frame.origin.x = 50*screenWidth/750 + CGFloat(i)*(100*screenWidth/750 + 10*screenWidth/750)
+                
+                tile.frame.origin.y = 100*screenHeight/1334
+            let point = CGPoint(x: tile.frame.origin.x, y: tile.frame.origin.y)
+                pointArray.append(point)
+                
+                let randomNumber = Int(arc4random_uniform(6))
+                tilesColors.append(randomNumber)
+                let alpha: CGFloat = 0.85
+                switch randomNumber {
+                    
+                case 0: //red
+                    tile.backgroundColor = UIColor(red: 236/255, green: 72/255, blue: 81/255, alpha: alpha)
+                case 1: //orange
+                    tile.backgroundColor = UIColor(red: 245/255, green: 133/255, blue: 57/255, alpha: alpha)
+                case 2: //yellow
+                    tile.backgroundColor = UIColor(red: 248/255, green: 223/255, blue: 74/255, alpha: alpha)
+                case 3: //green
+                    tile.backgroundColor = UIColor(red: 157/255, green: 206/255, blue: 92/255, alpha: alpha)
+                case 4: //green
+                    tile.backgroundColor = UIColor(red: 245/255, green: 133/255, blue: 57/255, alpha: alpha)
+                case 5: //orange
+                    tile.backgroundColor = UIColor(red: 248/255, green: 223/255, blue: 74/255, alpha: alpha)
+                    
+                default:
+                    break
+                }
+                
+                
+         
+                    tile.layer.cornerRadius = 5.0
+                
+                tile.clipsToBounds = true
+                rectArray.append(tile.frame)
+                tile.alpha = 1.0
+                tile.layer.zPosition = 1000
+                self.view.addSubview(tile)
+            
+            }
+        
+        
+        
+        
+        startTutorial2()
+    }
+    
+    private func startTutorial2() {
         
         let appDel = UIApplication.shared.delegate as! AppDelegate
         let context = appDel.persistentContainer.viewContext
@@ -532,8 +796,8 @@ class MenuViewController: UIViewController {
         
         
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.respondToTapGesture(_:)))
-        self.view.addGestureRecognizer(tap)
+      //  let tap = UITapGestureRecognizer(target: self, action: #selector(MenuViewController.respondToTapGesture(_:)))
+      //  self.view.addGestureRecognizer(tap)
         
         nextAnnotation()
         
@@ -571,11 +835,11 @@ class MenuViewController: UIViewController {
             
             
         }
-        if resultsTutorialRequest.count < 1 {
-            startTutorial()
-        } else {
+  //      if resultsTutorialRequest.count < 1 {
+  //          startTutorial()
+  //      } else {
             addLabels()
-        }
+  //      }
     }
     
     private func loadLevelAccess() {

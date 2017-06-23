@@ -84,9 +84,7 @@ class MatchViewController: UIViewController {
         
         
     }
-    
-    
-    
+
     override func viewWillAppear(_ animated: Bool) {
 
         if game == "wise" || game == "farcical" || game == "foolish" {
